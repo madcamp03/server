@@ -20,6 +20,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// 제발 고쳐저라
 //auth(passport); // sets button click functionalities
 
 // 초기화 실행
