@@ -8,7 +8,10 @@ const { initializeDatabase } = require('./database/db'); // Adjust the path acco
 //const auth = require('./auth');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+app.use(bodyParser.json());
+app.use(cors());
 
 // 세션 설정
 app.use(session({
@@ -25,6 +28,39 @@ app.use(passport.session());
 
 // 초기화 실행
 initializeDatabase();
+
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  multipleStatements: true
+});
+
+// API Endpoints
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const [rows] = await db.query('SELECT * FROM users WHERE user_id = ? AND user_password = ?', [username, password]);
+    if (rows.length > 0) {
+      const user = rows[0];
+      res.json({
+        user_id: user.user_id,
+        user_name: user.user_name,
+        real_name: user.real_name,
+        user_role: user.user_role,
+        team_id: user.team_id,
+        created_at: user.created_at
+      });
+    } else {
+      res.status(401).json({ error: 'Invalid username or password' });
+    }
+  } catch (err) {
+    console.error('Error during login:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 // // 라우트 설정
 // const gitcatRouter = require('./routes/gitcatRouter');
