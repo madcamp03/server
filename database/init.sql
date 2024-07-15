@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS players_record_hitter (
     player_id INTEGER,
     player_name VARCHAR(255),
     team VARCHAR(255),
+    team_id INTEGER,
     season INTEGER,
     game_count INTEGER,
     bat_avg DECIMAL(5, 3), -- 타율
@@ -74,7 +75,6 @@ CREATE TABLE IF NOT EXISTS players_record_hitter (
     bb INTEGER, -- 볼넷
     so INTEGER, -- 삼진
     risp DECIMAL(5, 3), -- 득점권 타율
-    sba INTEGER, -- 도루 시도
     sb INTEGER, -- 도루 성공
     sb_percent DOUBLE, -- 도루성공률
     FOREIGN KEY (player_id) REFERENCES players_info_hitter(player_id)
@@ -98,10 +98,12 @@ CREATE TABLE IF NOT EXISTS users (
 -- team 테이블 생성
 CREATE TABLE IF NOT EXISTS team (
     id INTEGER PRIMARY KEY,
-    username VARCHAR(255),
-    password VARCHAR(255),
-    role VARCHAR(50), -- manager, player, guest
-    created_at TIMESTAMP
+    team_name VARCHAR(255),
+    created_at int,
+    region VARCHAR(255),
+    manager VARCHAR(255),
+    timeline text,
+    photo text
 );
 
 -- notices 테이블 생성
