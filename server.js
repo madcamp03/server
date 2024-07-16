@@ -25,8 +25,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// 제발 고쳐저라
-//auth(passport); // sets button click functionalities
 
 // 초기화 실행
 initializeDatabase();
@@ -40,10 +38,12 @@ const db = mysql.createPool({
 });
 
 // API Endpoints
+// -- test
 app.get('/api', async (req, res) => {
   res.send("welcome")
 });
 
+// -- login
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -66,14 +66,28 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-// // 라우트 설정
-// const gitcatRouter = require('./routes/gitcatRouter');
-// app.use('/gitcat', gitcatRouter); // Using repoRouter
 
-// // 기본 라우트
-// app.get('/', (req, res) => {
-//   res.send('<h1>Welcome to GitCat</h1><a href="/auth/github">Login with GitHub</a>');
-// });
+// -- all records : hitter
+app.get('/api/records/hitter', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM players_record_hitter');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching players_record_hitter:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
+// -- all records : pitcher
+app.get('/api/records/pitcher', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM players_record_pitcher');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching players_record_hitter:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 
 
 // app.get('/auth/github/callback',
