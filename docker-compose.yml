@@ -1,9 +1,13 @@
 services:
   db:
-    image: mysql:5.7
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    # image: mysql:5.7
     restart: always
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d
+    # volumes:
+    #   - ./database:/docker-entrypoint-initdb.d
+    #   - ./my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - "3306:3306"
     environment:
