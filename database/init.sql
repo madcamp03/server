@@ -122,21 +122,21 @@ CREATE TABLE IF NOT EXISTS players_record_hitter (
 
 -- users 테이블 생성
 CREATE TABLE IF NOT EXISTS users (
-    user_id INTEGER PRIMARY KEY,
+    user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user_name VARCHAR(255),
     real_name VARCHAR(255),
     user_password VARCHAR(255),
     user_role VARCHAR(50),
-    team_id INTEGER DEFAULT -1,
+    team_id INTEGER DEFAULT NULL,
     created_at TIMESTAMP
 );
 
 -- 유저 데이터 삽입
-INSERT INTO users VALUES
-(1, 'heo', 'gyeongmin heo', 'password', 'player', 3, NOW()),
-(2, 'yang', 'euiji yang', 'password', 'player', 3, NOW()),
-(3, 'park', 'geonwoo park', 'password', 'player', 6, NOW()),
-(4, 'manager', 'manager name', 'password', 'manager', 3, NOW())
+INSERT INTO users (user_name, real_name, user_password, user_role, team_id, created_at) VALUES
+('heo', 'gyeongmin heo', 'password', 'player', 3, NOW()),
+('yang', 'euiji yang', 'password', 'player', 3, NOW()),
+('park', 'geonwoo park', 'password', 'player', 6, NOW()),
+('manager', 'manager name', 'password', 'manager', 3, NOW());
 
 
 

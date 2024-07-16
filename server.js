@@ -40,29 +40,23 @@ const db = mysql.createPool({
 });
 
 // API Endpoints
+app.get('/api', async (req, res) => {
+  res.send("welcome")
+});
+
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-
   try {
-    // const [rows] = await db.query('SELECT * FROM users WHERE user_id = ? AND user_password = ?', [username, password]);
-    // if (rows.length > 0) {
-    //   const user = rows[0];
-    //   res.json({
-    //     user_id: user.user_id,
-    //     user_name: user.user_name,
-    //     real_name: user.real_name,
-    //     user_role: user.user_role,
-    //     team_id: user.team_id,
-    //     created_at: user.created_at
-    //   });
-    if (true) {
+    const [rows] = await db.query('SELECT * FROM users WHERE user_name = ? AND user_password = ?', [username, password]);
+    if (rows.length > 0) {
+      const user = rows[0];
       res.json({
-        user_id: 1,
-        user_name: 'admin',
-        real_name: 'admin',
-        user_role: 'manager',
-        team_id: 3,
-        created_at: '2024-07-16'
+        user_id: user.user_id,
+        user_name: user.user_name,
+        real_name: user.real_name,
+        user_role: user.user_role,
+        team_id: user.team_id,
+        created_at: user.created_at
       });
     } else {
       res.status(401).json({ error: 'Invalid username or password' });
@@ -72,7 +66,6 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 // // 라우트 설정
 // const gitcatRouter = require('./routes/gitcatRouter');
 // app.use('/gitcat', gitcatRouter); // Using repoRouter
