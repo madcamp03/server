@@ -15,8 +15,13 @@ const db = mysql.createPool({
 const initializeDatabase = async () => {
   try {
     const connection = await db.getConnection();
-    const initSql = fs.readFileSync(path.resolve('database/init.sql'), 'utf-8');
-    await connection.query(initSql);
+    //
+    const initSql = fs.readFileSync(path.resolve(__dirname, '..', 'database', 'init.sql'), 'utf-8');
+    const queries = initSql.split(';').filter(query => query.trim() !== '');
+    for (let query of queries) {
+      await connection.query(query);
+    }
+    //
     connection.release();
     console.log('Database initialized successfully');
   } catch (error) {

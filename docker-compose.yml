@@ -3,7 +3,7 @@ services:
     image: mysql:5.7
     restart: always
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
+      - ./database:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     environment:
@@ -11,10 +11,14 @@ services:
       MYSQL_DATABASE: mydb
 
   node-app:
-    build: ./node-app
+    build:
+      context: .
+      dockerfile: node-app/Dockerfile
     restart: always
     ports:
       - "3000:3000"
+    stdin_open: true
+    tty: true
     depends_on:
       - db
     environment:
@@ -22,3 +26,4 @@ services:
       DB_USER: root
       DB_PASSWORD: pass
       DB_NAME: mydb
+      SESSION_SECRET: secret

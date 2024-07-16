@@ -30,7 +30,7 @@ INSERT INTO team (id, team_name, created_at, region, manager, timeline, photo) V
 CREATE TABLE IF NOT EXISTS players_info_pitcher (
     player_id INTEGER PRIMARY KEY,
     player_name VARCHAR(255),
-    team VARCHAR(255),
+    team_id INTEGER,
     birth DATE,
     hand VARCHAR(255), -- 우투우타, 좌투좌타 등..
     uni_num INTEGER, -- 등번호
@@ -122,31 +122,22 @@ CREATE TABLE IF NOT EXISTS players_record_hitter (
 
 -- users 테이블 생성
 CREATE TABLE IF NOT EXISTS users (
-    user_id INTEGER PRIMARY KEY,
+    user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user_name VARCHAR(255),
     real_name VARCHAR(255),
     user_password VARCHAR(255),
     user_role VARCHAR(50),
-    team_id INTEGER DEFAULT -1,
+    team_id INTEGER DEFAULT NULL,
     created_at TIMESTAMP
 );
 
 -- 유저 데이터 삽입
-INSERT INTO users VALUES
-(1, 'heo', 'gyeongmin heo', 'password', 'player', 3, NOW()),
-(2, 'yang', 'euiji yang', 'password', 'player', 3, NOW()),
-(3, 'park', 'geonwoo park', 'password', 'player', 6, NOW()),
-(4, 'manager', 'manager name', 'password', 'manager', 3, NOW()),
+INSERT INTO users (user_name, real_name, user_password, user_role, team_id, created_at) VALUES
+('heo', 'gyeongmin heo', 'password', 'player', 3, NOW()),
+('yang', 'euiji yang', 'password', 'player', 3, NOW()),
+('park', 'geonwoo park', 'password', 'player', 6, NOW()),
+('manager', 'manager name', 'password', 'manager', 3, NOW());
 
-
--- 관계 설정
-ALTER TABLE players_record_pitcher
-ADD CONSTRAINT fk_players_info_pitcher
-FOREIGN KEY (player_id) REFERENCES players_info_pitcher(player_id);
-
-ALTER TABLE players_record_hitter
-ADD CONSTRAINT fk_players_info_hitter
-FOREIGN KEY (player_id) REFERENCES players_info_hitter(player_id);
 
 
 -- notices 테이블 생성

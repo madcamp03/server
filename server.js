@@ -40,11 +40,14 @@ const db = mysql.createPool({
 });
 
 // API Endpoints
+app.get('/api', async (req, res) => {
+  res.send("welcome")
+});
+
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-
   try {
-    const [rows] = await db.query('SELECT * FROM users WHERE user_id = ? AND user_password = ?', [username, password]);
+    const [rows] = await db.query('SELECT * FROM users WHERE user_name = ? AND user_password = ?', [username, password]);
     if (rows.length > 0) {
       const user = rows[0];
       res.json({
@@ -63,7 +66,6 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 // // 라우트 설정
 // const gitcatRouter = require('./routes/gitcatRouter');
 // app.use('/gitcat', gitcatRouter); // Using repoRouter
