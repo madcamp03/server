@@ -195,6 +195,29 @@ app.post('/api/pitcher/details', async (req, res) => {
 });
 
 
+// API Endpoints
+app.post('/api/game/result', async (req, res) => {
+  const { game_id } = req.body;
+
+  if (!game_id) {
+    return res.status(400).json({ error: 'game_id is required' });
+  }
+
+  try {
+    const [rows] = await db.query('SELECT * FROM game_result WHERE game_id = ?', [game_id]);
+
+    if (rows.length > 0) {
+      const gameResult = rows[0];
+      res.json(gameResult);
+    } else {
+      return res.status(404).json({ error: `Game with id ${game_id} not found` });
+    }
+  } catch (error) {
+    console.error('Error fetching game result:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // update game results
 app.patch('/api/results/update', async (req, res) => {
   const {
